@@ -1,5 +1,6 @@
 package com.example.mitali.cthackathon;
 
+import android.media.Image;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    private static int num;
+    private static int selected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +59,10 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Contact us!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-
     }
 
 
@@ -113,8 +117,20 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            num = getArguments().getInt(ARG_SECTION_NUMBER);
+            switch(num) {
+                case (1):
+                    TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+                    textView.setText(getString(R.string.section_format));
+                    Button button = (Button) rootView.findViewById(R.id.button2);
+                    button.setText("Next Family");
+                    TextView textView1 = (TextView) rootView.findViewById(R.id.family_name);
+                    textView1.setText("Chowder");
+                    rootView.findViewById(R.id.tabs).setVisibility(View.GONE);
+                    break;
+                case (2):
+                    rootView.findViewById(R.id.button2).setVisibility(View.GONE);
+            }
             return rootView;
         }
     }
@@ -139,7 +155,27 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
+        }
+    }
+
+    public void plus(View view) {
+        if(selected < 1)
+            selected++;
+        else
+            selected = 0;
+        TextView textView1 = (TextView) findViewById(R.id.family_name);
+        textView1.setText(getName(selected));
+    }
+
+    private String getName(int s) {
+        switch (s) {
+            case (0):
+                return "Chowder";
+            case (1):
+                return "Parr";
+            default:
+                return "Error";
         }
     }
 }
