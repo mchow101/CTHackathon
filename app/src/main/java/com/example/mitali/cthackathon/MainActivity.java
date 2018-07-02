@@ -3,6 +3,7 @@ package com.example.mitali.cthackathon;
 import android.media.Image;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -117,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            TabLayout tabLayout = rootView.findViewById(R.id.tabs);
+            int tab_position=tabLayout.getSelectedTabPosition();
+
             num = getArguments().getInt(ARG_SECTION_NUMBER);
             switch(num) {
                 case (1):
@@ -125,11 +130,29 @@ public class MainActivity extends AppCompatActivity {
                     Button button = (Button) rootView.findViewById(R.id.button2);
                     button.setText("Next Family");
                     TextView textView1 = (TextView) rootView.findViewById(R.id.family_name);
-                    textView1.setText("Chowder");
+                    textView1.setText("");
                     rootView.findViewById(R.id.tabs).setVisibility(View.GONE);
                     break;
                 case (2):
                     rootView.findViewById(R.id.button2).setVisibility(View.GONE);
+                    if(tab_position==0){
+                        TextView textView2 = (TextView) rootView.findViewById(R.id.about);
+                        String s;
+                        switch (selected) {
+                            case (2):
+                                s = "The Chowders\nWe immigrated to California in 2014, and we are currently in the San Fransisco Bay Area.";
+                                break;
+                            case (1):
+                                s = "The Parrs\nOur family enjoys eating, working out, and combating supervillians in our free time.";
+                                break;
+                            case (0):
+                                s = "The Martinezes\nWe came to the US four years ago and thank the CC community for their support!";
+                                break;
+                            default:
+                                s = "Error";
+                        }
+                        textView2.setText(s);
+                    }
             }
             return rootView;
         }
@@ -160,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void plus(View view) {
-        if(selected < 1)
+        if(selected < 2)
             selected++;
         else
             selected = 0;
@@ -170,12 +193,23 @@ public class MainActivity extends AppCompatActivity {
 
     private String getName(int s) {
         switch (s) {
-            case (0):
-                return "Chowder";
+            case (2):
+                return "The Chowders\nWe immigrated to California in 2014, and we are currently in the San Fransisco Bay Area.";
             case (1):
-                return "Parr";
+                return "The Parrs\nOur family enjoys eating, working out, and combating supervillians in our free time.";
+            case (0):
+                return "The Martinezes\nWe came to the US four years ago and thank the CC community for their support!";
             default:
                 return "Error";
+        }
+    }
+
+    public void update(View view) {
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
+        int tab_position=tabLayout.getSelectedTabPosition();
+        if(tab_position==1){
+            TextView textView2 = (TextView) view.findViewById(R.id.about);
+            textView2.setText(getName(selected));
         }
     }
 }
